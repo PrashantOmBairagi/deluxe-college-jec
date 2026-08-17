@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>डीलक्स कॉलेज</title>
+    
+    <!-- Google Fonts for Yatra One -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.25); /* Transparent glass */
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Adjust glass background for dark mode if preferred */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --glass-bg: rgba(0, 0, 0, 0.2);
+                --glass-border: rgba(255, 255, 255, 0.15);
+            }
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Yatra One', cursive;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/Deluxe College.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+            filter: brightness(0.8) contrast(1.15) saturate(1.1) sepia(0.1);
+        }
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 20%, rgba(0,0,0,0.7) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .live-indicator {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(0, 0, 0, 0.25);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 20;
+            letter-spacing: 1.5px;
+        }
+
+        .college-title {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            flex-direction: column;
+            font-size: 5.5rem;
+            margin: 0;
+            letter-spacing: 3px;
+            font-weight: 900;
+            line-height: 0.95;
+            z-index: 10;
+            filter: drop-shadow(0 4px 18px rgba(0,0,0,0.85));
+            width: 90%;
+            max-width: 680px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .college-title {
+                top: 2rem;
+                left: 2rem;
+                font-size: 4.18rem;
+            }
+        }
+        @media (max-width: 680px) {
+            .college-title {
+                bottom: 19rem;
+                left: 2rem;
+                font-size: 3.08rem;
+            }
+        }
+
+        .title-line1 {
+            color: #ffffff;
+            text-shadow: 
+                0 2px 0 #111,
+                0 4px 10px rgba(0,0,0,0.9);
+        }
+
+        .title-line2 {
+            padding-left: 1.4em; 
+            color: #f5c518; /* Rich Cinematic Amber Gold */
+            text-shadow: 
+                0 2px 0 #3a2200,
+                0 0 25px rgba(245, 197, 24, 0.45),
+                0 4px 10px rgba(0,0,0,0.9);
+        }
+
+        .music-player {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border-radius: 999px;
+            padding: 0.8rem 1.8rem 0.8rem 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.4rem;
+            width: 90%;
+            max-width: 680px;
+            z-index: 10;
+            box-sizing: border-box;
+        }
+
+        .thumbnail-container {
+    flex-shrink: 0;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.25);
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.thumbnail-container::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: #111;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+}
+
+        .thumbnail-disk {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: spinDisk 8s linear infinite;
+            animation-play-state: paused;
+            border-radius: 50%;
+            will-change: transform;
+        }
+
+        .thumbnail-disk.playing {
+            animation-play-state: running !important;
+        }
+
+        @keyframes spinDisk {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .track-info {
+            flex-grow: 1;
+            min-width: 0; /* Important for marquee/truncation */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Moving train / marquee title */
+        .marquee-wrapper {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            margin-bottom: 0.15rem;
+        }
+
+        .track-title {
+            display: inline-block;
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            white-space: nowrap;
+        }
+
+        .track-title.animate-marquee {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marqueeTrain 12s linear infinite;
+        }
+
+        @keyframes marqueeTrain {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .track-artist {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.6rem;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .small-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border-radius: 50%;
+            transition: transform 0.2s, background 0.2s;
+        }
+        
+        .ping-dev {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        z-index: 1000;
+    }
+
+.ping-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    padding: 0;
+    font-size: 0.72rem;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    letter-spacing: 0;
+    transition: color 0.2s;
+}
+
+.ping-btn:hover {
+    color: rgba(255,255,255,0.9);
+}
+
+        .small-btn:hover {
+            z-index: 20;
+        }
+        #fullscreenBtn:hover {
+            transform: scale(1.15);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        #fullscreenBtn:active {
+            transform: scale(0.95);
+        }
+        #fullscreenBtn svg {
+            width: 22px;
+            height: 22px;
+            fill: #fff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+        }
+        
+        .small-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+        }
+
+        .large-btn {
+            background: #ffffff;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .large-btn:hover {
+            transform: scale(1.08);
+            background: #f0f0f0;
+        }
+
+        .large-btn:active {
+            transform: scale(0.95);
+        }
+
+        .large-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #111111;
+        }
+
+        .progress-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress {
+            height: 100%;
+            background: #ffffff;
+            border-radius: 3px;
+            width: 0%;
+            box-shadow: 0 0 8px rgba(255,255,255,0.9);
+            pointer-events: none;
+        }
+
+        .time-display {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.75rem;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .college-title {
+                top: 2rem;
+                font-size: 3.8rem;
+            }
+            .live-indicator {
+                top: 1.5rem;
+                right: 1.5rem;
+            }
+        }
+        @media (max-width: 680px) {
+            .college-title {
+                bottom: 19rem;
+                font-size: 2.8rem;
+            }
+            .title-line2 {
+                padding-left: 1em;
+            }
+            .live-indicator {
+                top: 1.2rem;
+                right: 1.2rem;
+                padding: 0.2rem 0.6rem;
+                font-size: 0.65rem;
+            }
+            .music-player {
+                flex-direction: column;
+                border-radius: 2rem;
+                padding: 1.2rem;
+                bottom: 1.5rem;
+                align-items: center;
+                gap: 1rem;
+            }
+            .track-info {
+                width: 100%;
+                align-items: center;
+                text-align: center;
+            }
+            .marquee-wrapper {
+                text-align: center;
+            }
+            .progress-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-image"></div>
+    <div class="background-overlay"></div>
+
+    <!-- Live Status Top Right -->
+    <div class="live-indicator">
+        <span class="pulse-dot"></span> <span id="listenerCount">42</span> &nbsp;LISTENING
+    </div>
+
+    <!-- Center Title -->
+    <h1 class="college-title">
+        <span class="title-line1">डीलक्स</span>
+        <span class="title-line2">कॉलेज</span>
+    </h1>
+
+    <div class="music-player">
+        <div class="thumbnail-container">
+            <img id="trackThumbnail" src="assets/default-cd.svg" alt="Thumbnail" class="thumbnail-disk" onerror="this.onerror=null; this.src='assets/default-cd.svg';">
+        </div>
+        
+        <div class="track-info">
+            <div class="marquee-wrapper" id="marqueeWrapper">
+                <span class="track-title" id="trackTitle">Loading song...</span>
+            </div>
+            <div class="track-artist" id="trackArtist">Bollywood Classics</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="prevBtn" title="Previous" class="small-btn">
+                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+            <button id="playBtn" title="Play/Pause" class="large-btn">
+                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="pauseIcon" viewBox="0 0 24 24" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button id="nextBtn" title="Next" class="small-btn">
+                <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+            <button id="fullscreenBtn" title="Fullscreen" class="small-btn">
+                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="audio" preload="metadata"></audio>
+
+    <!-- Ping Dev - fixed bottom right -->
+    <div class="ping-dev">
+        <a href="https://prashant-bairagi-portfolio.vercel.app#contact" target="_blank" class="ping-btn">ping dev</a>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audio');
+        const playBtn = document.getElementById('playBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const progressBar = document.getElementById('progressBar');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const trackTitleEl = document.getElementById('trackTitle');
+        const trackArtistEl = document.getElementById('trackArtist');
+        const trackThumbnail = document.getElementById('trackThumbnail');
+        const marqueeWrapper = document.getElementById('marqueeWrapper');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+if (fullscreenBtn) {
+    fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => console.warn('Fullscreen request failed:', err));
+        } else {
+            document.exitFullscreen().catch(err => console.warn('Exit fullscreen failed:', err));
+        }
+    });
+}
+
+        // Obfuscated playlist loaded at runtime
+        const _encodedTracks = "W3siZmlsZSI6ICJNdWpoc2UgTW9oYWJiYXQgS2EgSHVtIEhhaW4gUmFoaSBQeWFyIEtlIDEyOCBLYnBzLm1wMyIsICJjb3ZlciI6ICJhc3NldHMvY292ZXJzL011amhzZSBNb2hhYmJhdCBLYSBIdW0gSGFpbiBSYWhpIFB5YXIgS2UgMTI4IEticHMuanBnIiwgInRpdGxlIjogIk11amhzZSBNb2hhYmJhdCBLYSAtIEh1bSBIYWluIFJhaGkgUHlhciBLZSIsICJhcnRpc3QiOiAiS3VtYXIgU2FudSwgQWxrYSBZYWduaWsifSwgeyJmaWxlIjogIkJhaHV0IFB5YXIgS2FydGUgSGFpIEZlbWFsZSBWZXJzaW9uIFNhYWphbiAxMjggS2Jwcy5tcDMiLCAiY292ZXIiOiAiYXNzZXRzL2NvdmVycy9CYWh1dCBQeWFyIEthcnRlIEhhaSBGZW1hbGUgVmVyc2lvbiBTYWFqYW4gMTI4IEticHMuanBnIiwgInRpdGxlIjogIkJhaHV0IFB5YXIgS2FydGUgSGFpIChGZW1hbGUgVmVyc2lvbikgLSBTYWFqYW4iLCAiYXJ0aXN0IjogIkFudXJhZGhhIFBhdWR3YWwifSwgeyJmaWxlIjogIkRhcmQgS2FyYWFyYSBEdW0gTGFnYSBLZSBIYWlzaGEgMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvRGFyZCBLYXJhYXJhIER1bSBMYWdhIEtlIEhhaXNoYSAxMjggS2Jwcy5qcGciLCAidGl0bGUiOiAiRGFyZCBLYXJhYXJhIC0gRHVtIExhZ2EgS2UgSGFpc2hhIiwgImFydGlzdCI6ICJLdW1hciBTYW51LCBTYWRoYW5hIFNhcmdhbSJ9LCB7ImZpbGUiOiAiRWsgU2FuYW0gQ2hhaGl5ZSBBYXNoaXF1aSBLZSBMaXllIChmZW1hbGUpIEFhc2hpcXVpIDEyOCBLYnBzLm1wMyIsICJjb3ZlciI6ICJhc3NldHMvY292ZXJzL0VrIFNhbmFtIENoYWhpeWUgQWFzaGlxdWkgS2UgTGl5ZSAoZmVtYWxlKSBBYXNoaXF1aSAxMjggS2Jwcy5qcGciLCAidGl0bGUiOiAiRWsgU2FuYW0gQ2hhaGl5ZSBBYXNoaXF1aSBLZSBMaXllIC0gQWFzaGlxdWkiLCAiYXJ0aXN0IjogIkFudXJhZGhhIFBhdWR3YWwifSwgeyJmaWxlIjogIkplZXRhIFRoYSBKaXNrZSBMaXllIERpbHdhbGUgMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvSmVldGEgVGhhIEppc2tlIExpeWUgRGlsd2FsZSAxMjggS2Jwcy5qcGciLCAidGl0bGUiOiAiSmVldGEgVGhhIEppc2tlIExpeWUgLSBEaWx3YWxlIiwgImFydGlzdCI6ICJLdW1hciBTYW51LCBBbGthIFlhZ25paywgQWpheSBEZXZnbiJ9LCB7ImZpbGUiOiAiS2l0bmEgSGFzZWVuIENoZWhyYSBEaWx3YWxlIDEyOCBLYnBzLm1wMyIsICJjb3ZlciI6ICJhc3NldHMvY292ZXJzL0tpdG5hIEhhc2VlbiBDaGVocmEgRGlsd2FsZSAxMjggS2Jwcy5qcGciLCAidGl0bGUiOiAiS2l0bmEgSGFzZWVuIENoZWhyYSAtIERpbHdhbGUiLCAiYXJ0aXN0IjogIkt1bWFyIFNhbnUifSwgeyJmaWxlIjogIk1haW4gRHVuaXlhIEJodWxhIERvb25nYSBBYXNoaXF1aSAxMjggS2Jwcy5tcDMiLCAiY292ZXIiOiAiYXNzZXRzL2NvdmVycy9NYWluIER1bml5YSBCaHVsYSBEb29uZ2EgQWFzaGlxdWkgMTI4IEticHMuanBnIiwgInRpdGxlIjogIk1haW4gRHVuaXlhIEJodWxhIERvb25nYSAtIEFhc2hpcXVpIiwgImFydGlzdCI6ICJBbnVyYWRoYSBQYXVkd2FsLCBLdW1hciBTYW51In0sIHsiZmlsZSI6ICJNYWluZSBQeWFyIFR1bWhpIFNlIEtpeWEgSGFpIFBob29sIEF1ciBLYWFudGUgMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvTWFpbmUgUHlhciBUdW1oaSBTZSBLaXlhIEhhaSBQaG9vbCBBdXIgS2FhbnRlIDEyOCBLYnBzLmpwZyIsICJ0aXRsZSI6ICJNYWluZSBQeWFyIFR1bWhpIFNlIEtpeWEgSGFpIC0gUGhvb2wgQXVyIEthYW50ZSIsICJhcnRpc3QiOiAiQW51cmFkaGEgUGF1ZHdhbCwgS3VtYXIgU2FudSJ9LCB7ImZpbGUiOiAiTWVyZSBSYXNoa2UgUWFtYXIgKHJlbWl4KSBCYWFkc2hhaG8gMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvTWVyZSBSYXNoa2UgUWFtYXIgKHJlbWl4KSBCYWFkc2hhaG8gMTI4IEticHMuanBnIiwgInRpdGxlIjogIk1lcmUgUmFzaGtlIFFhbWFyIChSZW1peCkgLSBCYWFkc2hhaG8iLCAiYXJ0aXN0IjogIk51c3JhdCBGYXRlaCBBbGkgS2hhbiwgUmFoYXQgRmF0ZWggQWxpIEtoYW4ifSwgeyJmaWxlIjogIlJhYWggTWVpbiBVbnNlIE11bGFxYXQgVmlqYXlwYXRoIDEyOCBLYnBzLm1wMyIsICJjb3ZlciI6ICJhc3NldHMvY292ZXJzL1JhYWggTWVpbiBVbnNlIE11bGFxYXQgVmlqYXlwYXRoIDEyOCBLYnBzLmpwZyIsICJ0aXRsZSI6ICJSYWFoIE1laW4gVW5zZSBNdWxhcWF0IC0gVmlqYXlwYXRoIiwgImFydGlzdCI6ICJLdW1hciBTYW51LCBBbGthIFlhZ25payJ9LCB7ImZpbGUiOiAiU2FhdG9uIEphbmFtIE1haW4gVGVyZSBEaWx3YWxlIDEyOCBLYnBzLm1wMyIsICJjb3ZlciI6ICJhc3NldHMvY292ZXJzL1NhYXRvbiBKYW5hbSBNYWluIFRlcmUgRGlsd2FsZSAxMjggS2Jwcy5qcGciLCAidGl0bGUiOiAiU2FhdG9uIEphbmFtIE1haW4gVGVyZSAtIERpbHdhbGUiLCAiYXJ0aXN0IjogIkt1bWFyIFNhbnUsIEFsa2EgWWFnbmlrIn0sIHsiZmlsZSI6ICJTb2NoZW5nZSBUdW1oZSBQeWFyIERlZXdhbmEgMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvU29jaGVuZ2UgVHVtaGUgUHlhciBEZWV3YW5hIDEyOCBLYnBzLmpwZyIsICJ0aXRsZSI6ICJTb2NoZW5nZSBUdW1oZSBQeWFyIC0gRGVld2FuYSIsICJhcnRpc3QiOiAiS3VtYXIgU2FudSwgTmFkZWVtLVNocmF2YW4ifSwgeyJmaWxlIjogIlR1IFB5YXIgSGFpIEtpc2kgQXVyIEthIERpbCBIYWkgS2UgTWFudGEgTmFoaW4gMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvVHUgUHlhciBIYWkgS2lzaSBBdXIgS2EgRGlsIEhhaSBLZSBNYW50YSBOYWhpbiAxMjggS2Jwcy5qcGciLCAidGl0bGUiOiAiVHUgUHlhciBIYWkgS2lzaSBBdXIgS2EgLSBEaWwgSGFpIEtlIE1hbnRhIE5haGluIiwgImFydGlzdCI6ICJLdW1hciBTYW51LCBBbnVyYWRoYSBQYXVkd2FsIn0sIHsiZmlsZSI6ICJUdW0gRGlsIEtpIERoYWRrYW4gTWVpbiBEdWV0IFZlcnNpb24gQWJoaWplZXQgMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvVHVtIERpbCBLaSBEaGFka2FuIE1laW4gRHVldCBWZXJzaW9uIEFiaGlqZWV0IDEyOCBLYnBzLmpwZyIsICJ0aXRsZSI6ICJUdW0gRGlsIEtpIERoYWRrYW4gTWVpbiAoRHVldCBWZXJzaW9uKSAtIERoYWRrYW4iLCAiYXJ0aXN0IjogIkFiaGlqZWV0LCBBbGthIFlhZ25payJ9LCB7ImZpbGUiOiAiVHVtIFNlIEFjaGNoYSBLYXVuIEhhaSBDaGFuZCBUYXJlIFBob29sIFRhdXNlZWYgQWtodGFyIDEyOCBLYnBzLm1wMyIsICJjb3ZlciI6ICJhc3NldHMvY292ZXJzL1R1bSBTZSBBY2hjaGEgS2F1biBIYWkgQ2hhbmQgVGFyZSBQaG9vbCBUYXVzZWVmIEFraHRhciAxMjggS2Jwcy5qcGciLCAidGl0bGUiOiAiVHVtIFNlIEFjaGNoYSBLYXVuIEhhaSAoQ2hhbmQgVGFyZSBQaG9vbCkgLSBUYXVzZWVmIEFraHRhciIsICJhcnRpc3QiOiAiVGF1c2VlZiBBa2h0YXIifSwgeyJmaWxlIjogIlR1bWhlaW4gQXBuYSBCYW5hbmUgS2kgS2FzYW0gS2hhaSBIYWkgU2FkYWsgMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvVHVtaGVpbiBBcG5hIEJhbmFuZSBLaSBLYXNhbSBLaGFpIEhhaSBTYWRhayAxMjggS2Jwcy5qcGciLCAidGl0bGUiOiAiVHVtaGVpbiBBcG5hIEJhbmFuZSBLaSBLYXNhbSBLaGFpIEhhaSAtIFNhZGFrIiwgImFydGlzdCI6ICJBbnVyYWRoYSBQYXVkd2FsLCBLdW1hciBTYW51In0sIHsiZmlsZSI6ICJUdW1zYSBLb2kgUHlhYXJhIEtodWRkYXIgMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvVHVtc2EgS29pIFB5YWFyYSBLaHVkZGFyIDEyOCBLYnBzLmpwZyIsICJ0aXRsZSI6ICJUdW1zYSBLb2kgUHlhYXJhIC0gS2h1ZGRhciIsICJhcnRpc3QiOiAiS3VtYXIgU2FudSwgQWxrYSBZYWduaWsifSwgeyJmaWxlIjogIlR1bXNlIE1pbG5lIEtvIERpbCBQaG9vbCBBdXIgS2FhbnRlIDEyOCBLYnBzLm1wMyIsICJjb3ZlciI6ICJhc3NldHMvY292ZXJzL1R1bXNlIE1pbG5lIEtvIERpbCBQaG9vbCBBdXIgS2FhbnRlIDEyOCBLYnBzLmpwZyIsICJ0aXRsZSI6ICJUdW1zZSBNaWxuZSBLbyBEaWwgLSBQaG9vbCBBdXIgS2FhbnRlIiwgImFydGlzdCI6ICJBbGthIFlhZ25paywgS3VtYXIgU2FudSJ9LCB7ImZpbGUiOiAiV29oIE1lcmkgTmVlbmQgTWVyYSBDaGFpbiBIdW0gSGFpbiBSYWhpIFB5YXIgS2UgMTI4IEticHMubXAzIiwgImNvdmVyIjogImFzc2V0cy9jb3ZlcnMvV29oIE1lcmkgTmVlbmQgTWVyYSBDaGFpbiBIdW0gSGFpbiBSYWhpIFB5YXIgS2UgMTI4IEticHMuanBnIiwgInRpdGxlIjogIldvaCBNZXJpIE5lZW5kIE1lcmEgQ2hhaW4gLSBIdW0gSGFpbiBSYWhpIFB5YXIgS2UiLCAiYXJ0aXN0IjogIlNhZGhhbmEgU2FyZ2FtIn1d";
+        
+        const playlist = JSON.parse(atob(_encodedTracks));
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+
+        function updateMarquee() {
+            trackTitleEl.classList.remove('animate-marquee');
+            setTimeout(() => {
+                if (trackTitleEl.scrollWidth > marqueeWrapper.clientWidth || trackTitleEl.textContent.length > 25) {
+                    trackTitleEl.classList.add('animate-marquee');
+                }
+            }, 50);
+        }
+
+        function loadTrack(index) {
+            const track = playlist[index];
+            const fileUrl = 'assets/' + encodeURIComponent(track.file);
+            
+            // Set audio source
+            audio.src = fileUrl;
+            audio.load();
+            
+            progress.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+            durationEl.textContent = '0:00';
+            
+            trackTitleEl.textContent = track.title;
+            trackArtistEl.textContent = track.artist;
+            trackThumbnail.src = track.cover || 'assets/default-cd.svg';
+            
+            updateMarquee();
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        isPlaying = true;
+                        playIcon.style.display = 'none';
+                        pauseIcon.style.display = 'block';
+                        trackThumbnail.classList.add('playing');
+                    }).catch(err => {
+                        console.warn("Playback error or interaction required:", err);
+                    });
+                }
+            } else {
+                audio.pause();
+                isPlaying = false;
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                trackThumbnail.classList.remove('playing');
+            }
+        }
+
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePlay();
+        });
+
+        // Update progress & times
+        audio.addEventListener('timeupdate', () => {
+            const current = audio.currentTime;
+            const dur = audio.duration;
+            if (dur && !isNaN(dur)) {
+                const pct = (current / dur) * 100;
+                progress.style.width = `${pct}%`;
+                currentTimeEl.textContent = formatTime(current);
+                durationEl.textContent = formatTime(dur);
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            if (audio.duration && !isNaN(audio.duration)) {
+                durationEl.textContent = formatTime(audio.duration);
+            }
+        });
+
+        // Click to seek
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const clickPos = (e.clientX - rect.left) / rect.width;
+            if (audio.duration && !isNaN(audio.duration)) {
+                audio.currentTime = clickPos * audio.duration;
+            }
+        });
+
+        function formatTime(time) {
+            if (isNaN(time) || time === Infinity) return "0:00";
+            const mins = Math.floor(time / 60);
+            const secs = Math.floor(time % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Previous Track
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+            loadTrack(currentTrackIndex);
+            audio.play().then(() => {
+                isPlaying = true;
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                trackThumbnail.classList.add('playing');
+            }).catch(() => {});
+        });
+
+        // Next Track
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playNextTrack();
+        });
+
+        function playNextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            loadTrack(currentTrackIndex);
+            audio.play().then(() => {
+                isPlaying = true;
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                trackThumbnail.classList.add('playing');
+            }).catch(() => {});
+        }
+
+        // Auto play next track
+        audio.addEventListener('ended', () => {
+            playNextTrack();
+        });
+
+        // Audio state listeners for sync
+        audio.addEventListener('play', () => {
+            isPlaying = true;
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+            trackThumbnail.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            isPlaying = false;
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            trackThumbnail.classList.remove('playing');
+        });
+
+        // Window resize marquee adjustment
+        window.addEventListener('resize', updateMarquee);
+
+        // Initial setup
+        loadTrack(currentTrackIndex);
+
+        // Live counter ticker
+        const listenerCountEl = document.getElementById('listenerCount');
+        let listeners = 42;
+        setInterval(() => {
+            const change = Math.floor(Math.random() * 3) - 1;
+            listeners = Math.max(12, listeners + change);
+            listenerCountEl.textContent = listeners;
+        }, 4000);
+    </script>
+</body>
+</html>
